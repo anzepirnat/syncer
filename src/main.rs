@@ -8,7 +8,7 @@ use std::path::PathBuf;
 fn get_config_path() -> PathBuf {
     let exe_path = env::current_exe().expect("Failed to get current exe path");
     let exe_dir = exe_path.parent().expect("Failed to get exe directory");
-    let config_path = exe_dir.join("config.toml");
+    let config_path = exe_dir.join("syncer.toml");
     
     if config_path.exists() {
         config_path
