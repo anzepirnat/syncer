@@ -1,0 +1,10 @@
+# Enter as many sync pairs as you have folders to sync
+# If you want to sync the folder in both ways, add the same pair twice but in reverse order
+
+[[sync_pairs]]
+source_folder = "/path/to/source/folder"
+destination_folder = "/path/to/destination/folder"
+
+[[sync_pairs]]
+source_folder = "/path/to/another/source/folder"
+destination_folder = "/path/to/another/destination/folder"

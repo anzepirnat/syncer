@@ -1,20 +1,43 @@
 use std::fs;
 use std::path::Path;
-//use std::time::SystemTime;
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+struct Config {
+    sync_pairs: Vec<SyncPair>,
+}
+
+#[derive(Debug, Deserialize)]
+struct SyncPair {
+    source_folder: String,
+    destination_folder: String,
+}
 
 fn main() {
 
-    let source_folder = Path::new("/home/anzepirnat/DIY/syncer/izvor");
-    let destination_folder = Path::new("/home/anzepirnat/DIY/syncer/ponor");
-    //let mnt_folder = Path::new("/mnt");
-    //let mnt_anime_folder = Path::new("/mnt/UbuntuServer1/anime");
+    // Read the config file
+    let config = load_config("config.toml");
+    println!("Loaded config: {:?}", config);
 
-    sync(source_folder, destination_folder);
+    for pair in config.sync_pairs {
+        let source_folder = Path::new(&pair.source_folder);
+        let destination_folder = Path::new(&pair.destination_folder);
+        println!("\n\n#####################################################################################################################");
+        println!("Syncing from {:?} to {:?}", source_folder, destination_folder);
+        println!("#####################################################################################################################\n");
+        sync(source_folder, destination_folder);       
+    }
+}
+
+
+/// Load the configuration from a TOML file
+fn load_config(path: &str) -> Config {
+    let config_content = fs::read_to_string(path).expect("Failed to read config file");
+    toml::from_str(&config_content).expect("Failed to parse config file")
 }
 
 /// Copy a file from source to destination path
 fn copy_file(source_path: &Path, destination_path: &Path) {
-    // Copy the file from source to destination
     fs::copy(source_path, destination_path).expect("Failed to copy file");
 }
 
