@@ -29,7 +29,7 @@ fn check_modified(file_path: &Path) -> std::time::SystemTime {
 fn update_file (source_path: &Path, destination_path: &Path) {
     if check_modified(source_path) > check_modified(destination_path) {
         copy_file(source_path, destination_path);
-        println!("File updated from {:?} to {:?}", source_path, destination_path);
+        println!("File updated from {:?} to {:?}\n", source_path, destination_path);
     } else {
         println!("File is up to date.\n");
     }
