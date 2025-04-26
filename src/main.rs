@@ -15,7 +15,6 @@ struct SyncPair {
 
 fn main() {
 
-    // Read the config file
     let config = load_config("config.toml");
     println!("Loaded config: {:?}", config);
 
