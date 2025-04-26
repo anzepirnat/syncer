@@ -1,6 +1,21 @@
 use std::fs;
 use std::path::Path;
 use serde::Deserialize;
+use std::env;
+use std::path::PathBuf;
+
+/// Get the syncer.toml file
+fn get_config_path() -> PathBuf {
+    let exe_path = env::current_exe().expect("Failed to get current exe path");
+    let exe_dir = exe_path.parent().expect("Failed to get exe directory");
+    let config_path = exe_dir.join("config.toml");
+    
+    if config_path.exists() {
+        config_path
+    } else {
+        panic!("Config file not found at {:?}", config_path);
+    }
+}
 
 #[derive(Debug, Deserialize)]
 struct Config {
@@ -15,7 +30,8 @@ struct SyncPair {
 
 fn main() {
 
-    let config = load_config("config.toml");
+    let config_path = get_config_path();
+    let config = load_config(&config_path);
     println!("Loaded config: {:?}", config);
 
     for pair in config.sync_pairs {
@@ -30,7 +46,7 @@ fn main() {
 
 
 /// Load the configuration from a TOML file
-fn load_config(path: &str) -> Config {
+fn load_config(path: &Path) -> Config {
     let config_content = fs::read_to_string(path).expect("Failed to read config file");
     toml::from_str(&config_content).expect("Failed to parse config file")
 }
